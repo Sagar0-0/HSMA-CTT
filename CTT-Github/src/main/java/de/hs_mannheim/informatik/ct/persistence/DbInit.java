@@ -38,7 +38,7 @@ public class DbInit implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if(serverEnvironment.equals("dev")) {
-            roomsRepo.save(new Room("A007a", "A", 3));
+            roomsRepo.save(new Room("A007a", "A", 0));
             roomsRepo.save(new Room("test", "test", 12));
             roomsRepo.save(new Room("A210", "A", 19));
         }
