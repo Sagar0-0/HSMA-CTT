@@ -26,7 +26,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 public class DbInit implements CommandLineRunner {
     @Value("${server_env:production}")
@@ -43,5 +42,4 @@ public class DbInit implements CommandLineRunner {
             roomsRepo.save(new Room("A210", "A", 19));
         }
     }
-
 }
