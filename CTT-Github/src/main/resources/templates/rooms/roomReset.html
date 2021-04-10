@@ -1,0 +1,68 @@
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{rooms/layout}">
+
+<head>
+    <!--    <title th:text="${'Raum ' + roomData.roomName + ' zurücksetzen'}">Raum zurücksetzen</title>-->
+    <title>Raum zurücksetzen</title>
+
+    <style>
+        button {
+            border-width: 0;
+            outline: none;
+            border-radius: 12px;
+            background-color: #ff0000;
+            color: #02021d;
+            font-size: 1em;
+            min-height: 2em;
+            margin: 0.5em;
+            padding: 8px;
+            font-weight: bold;
+            transition: background-color .3s;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        button:hover {
+            background-color: #d40101;
+        }
+
+    </style>
+</head>
+
+
+
+<body>
+<div layout:fragment="content">
+    <h1 class="content-headers" style="margin-bottom: 0;">Raum zurücksetzen</h1>
+    <!--    <p th:text="${'Leider ist der Raum ' + roomData.roomName + ' momentan voll (Maximal: ' + roomData.maxCapacity + ' Personen). Bitte betreten Sie ihn nicht!'}">-->
+    <p>Wollen Sie den Raum wirklich zurücksetzen?</p>
+
+    <p>Wenn die Personenanzahl im Raum geringer als die von der App erfassten Personen ist, können sie den Raum
+        zurücksetzen. Mit dieser Funktion werden alle Personen aus dem Raum ausgeloggt!</p>
+
+    <p>Bitte denken Sie daran allen Personen im Raum mitzuteilen, dass sie sich nach dem Zurücksetzen erneut anmelden
+        müssen</p>
+
+    <p>Das zurücksetzen eines Raumes ist unwiderruflich und kann nicht rückgängig gemacht werden</p>
+
+    <p style="font-weight: bold">Der Missbrauch dieser Funktion ist Strafbar!</p>
+
+    <form method="post" action="#">
+
+        <input type="checkbox" id="checkForReset" required="required">
+        <label for="checkForReset">Ich habe die Hinweise gelesen und verstanden</label>
+
+        <br>
+        <br>
+
+
+        <button type="submit" name="roomResetButton">RAUM ZURÜCKSETZEN</button>
+
+    </form>
+
+
+</div>
+</body>
+</html>

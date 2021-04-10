@@ -46,7 +46,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 @Controller
-@RequestMapping("printout")
+@RequestMapping("/printout")
 public class PrintOutController {
     @Autowired
     private RoomService roomService;
