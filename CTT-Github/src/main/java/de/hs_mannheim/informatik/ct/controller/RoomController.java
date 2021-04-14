@@ -77,6 +77,7 @@ public class RoomController {
             return "forward:roomFull/" + room.get().getId();
         }
 
+
         Room.Data roomData = new Room.Data(room.get());
         model.addAttribute("roomData", roomData);
         model.addAttribute("visitData", new RoomVisit.Data(roomData));
@@ -164,6 +165,8 @@ public class RoomController {
         model.addAttribute("checkout", true);
         return "rooms/checkIn";
     }
+
+
 
     @RequestMapping("/roomFull/{roomId}")
     public String roomFull(@PathVariable String roomId, Model model) {

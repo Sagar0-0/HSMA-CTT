@@ -356,9 +356,8 @@ public class CtController implements ErrorController {
     }
 
     @RequestMapping("/roomReset")
-    public String roomReset() {
-        return "rooms/roomReset";
-    }
+    public String roomReset() { return "rooms/roomReset";}
+
 
     // ------------
     // ErrorControllerImpl

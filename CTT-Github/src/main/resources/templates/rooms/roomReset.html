@@ -8,17 +8,16 @@
     <title>Raum zurücksetzen</title>
 
     <style>
+
         button {
             border-width: 0;
             outline: none;
-            border-radius: 12px;
+            border-radius: 2px;
             background-color: #ff0000;
             color: #02021d;
             font-size: 1em;
             min-height: 2em;
             margin: 0.5em;
-            padding: 8px;
-            font-weight: bold;
             transition: background-color .3s;
             cursor: pointer;
             vertical-align: middle;
@@ -32,11 +31,11 @@
 </head>
 
 
-
 <body>
 <div layout:fragment="content">
     <h1 class="content-headers" style="margin-bottom: 0;">Raum zurücksetzen</h1>
     <!--    <p th:text="${'Leider ist der Raum ' + roomData.roomName + ' momentan voll (Maximal: ' + roomData.maxCapacity + ' Personen). Bitte betreten Sie ihn nicht!'}">-->
+   <div style="margin:30px; text-align: justify">
     <p>Wollen Sie den Raum wirklich zurücksetzen?</p>
 
     <p>Wenn die Personenanzahl im Raum geringer als die von der App erfassten Personen ist, können sie den Raum
@@ -45,21 +44,28 @@
     <p>Bitte denken Sie daran allen Personen im Raum mitzuteilen, dass sie sich nach dem Zurücksetzen erneut anmelden
         müssen</p>
 
-    <p>Das zurücksetzen eines Raumes ist unwiderruflich und kann nicht rückgängig gemacht werden</p>
+    <p>Das zurücksetzen eines Raumes ist unwiderruflich!</p>
 
     <p style="font-weight: bold">Der Missbrauch dieser Funktion ist Strafbar!</p>
 
+   </div>
+
     <form method="post" action="#">
-
-        <input type="checkbox" id="checkForReset" required="required">
-        <label for="checkForReset">Ich habe die Hinweise gelesen und verstanden</label>
-
+        <div style="font-size: large">
+            <input type="checkbox" id="checkForReset" required="required">
+            <label for="checkForReset">Ich habe die Hinweise gelesen und verstanden</label>
+        </div>
         <br>
         <br>
 
-
-        <button type="submit" name="roomResetButton">RAUM ZURÜCKSETZEN</button>
-
+        <div style="display: inline-flex;width: 520px;">
+            <div style="flex-grow: 1;">
+                <button style="color: ghostwhite" type="submit" name="roomResetButton">Raum zurücksetzen</button>
+            </div>
+            <div style="flex-grow: 1">
+                <a style="float: right; color: ghostwhite" class="button">Nicht Zurücksetzen</a>
+            </div>
+        </div>
     </form>
 
 
