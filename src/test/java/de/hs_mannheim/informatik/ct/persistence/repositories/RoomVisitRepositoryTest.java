@@ -40,6 +40,12 @@ import java.util.stream.Stream;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
+// todo
+//  findNotCheckedOutVisits()
+//  findNotCheckedOutVisits(Visitor)
+//  findNotCheckedOutVisits(Room)
+//  getRoomVisitorCount(Room)
+
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 public class RoomVisitRepositoryTest {
@@ -49,8 +55,12 @@ public class RoomVisitRepositoryTest {
     @Autowired
     private RoomVisitRepository roomVisitRepository;
 
+<<<<<<< HEAD
     private List<RoomVisit> visits;
 
+=======
+    //
+>>>>>>> 533bc83 (created todos)
     @Test
     public void deleteExpiredVisits() {
         val roomVisitHelper = new RoomVisitHelper(entityManager.persist(
@@ -93,6 +103,7 @@ public class RoomVisitRepositoryTest {
         assertThat(contacts, everyItem(hasProperty("targetVisit", equalTo(targetVisit))));
     }
 
+<<<<<<< HEAD
     @Test
     public void findNotCheckedOutVisitsTest() {
         altSetUp();
@@ -269,4 +280,7 @@ public class RoomVisitRepositoryTest {
 
         return Arrays.asList(visitsList);
     }
+=======
+
+>>>>>>> 533bc83 (created todos)
 }
