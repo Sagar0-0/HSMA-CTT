@@ -44,6 +44,7 @@ import java.util.*;
 import static de.hs_mannheim.informatik.ct.util.TimeUtil.convertToLocalDateTime;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.lessThan;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -221,11 +222,38 @@ class RoomVisitServiceTest {
 
         Mockito.verify(roomVisitRepository, Mockito.times(1))
                 .saveAll(roomVisitCaptor.capture());
+    @Test
+    void resetRoom(){
+        Visitor visitor = new Visitor("visitor");
+        RoomVisit visit = new RoomVisitHelper(new Room("A", "B", 2)).generateVisit(
+                visitor,
+                LocalDateTime.now(),
+                null
+        );
+        Room testRoom = visit.getRoom();
+
+        Mockito.when(roomVisitRepository.findNotCheckedOutVisits()).thenReturn(
+          Collections.singletonList(visit)
+        );
+
+        roomVisitService.resetRoom(testRoom);
+
+        Mockito.verify(roomVisitRepository).findNotCheckedOutVisits();
+
+        Mockito.verify(roomVisit, Mockito.atLeast(1)).checkOut(
+                ArgumentMatchers.any(Date.class),
+                RoomVisit.CheckOutSource.RoomReset
+        );
+
+        Mockito.verify(roomVisitRepository).saveAll(roomVisitCaptor.capture());
+
+        assertThat(roomVisitService.getVisitorCount(testRoom), equalTo(0));
     }
 
     @Test
     void resetFilledRoom(){
         Visitor visitor = new Visitor("visitor");
+        }
         RoomVisit visit = new RoomVisitHelper(new Room("A", "B", 2)).generateVisit(
                 visitor,
                 this.now,
