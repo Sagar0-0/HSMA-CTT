@@ -29,7 +29,15 @@ import de.hs_mannheim.informatik.ct.persistence.repositories.RoomVisitRepository
 import de.hs_mannheim.informatik.ct.persistence.repositories.VisitorRepository;
 import lombok.NonNull;
 import lombok.val;
+<<<<<<< HEAD
 import org.junit.jupiter.api.*;
+=======
+import org.apache.commons.math3.exception.util.ArgUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+>>>>>>> 946fdff (basic tests working)
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +54,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.lessThan;
+import static org.mockito.Mockito.validateMockitoUsage;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension.class)
@@ -228,6 +237,7 @@ class RoomVisitServiceTest {
     }
 
     @Test
+
     void resetRoom(){
         Visitor visitor = new Visitor("visitor");
         RoomVisit visit = new RoomVisitHelper(new Room("A", "B", 2)).generateVisit(
@@ -243,6 +253,7 @@ class RoomVisitServiceTest {
                 .thenReturn(Collections.singletonList(visit));
 
         Mockito.when(dateTimeService.getDateNow())
+
                 .thenReturn(java.util.Date.from(this.today.atStartOfDay()
                         .atZone(ZoneId.systemDefault())
                         .toInstant()));
@@ -260,6 +271,7 @@ class RoomVisitServiceTest {
     }
 
     @Test
+
     void resetFilledRoom(){
         Visitor visitor = new Visitor("visitor");
         RoomVisit visit = new RoomVisitHelper(new Room("A", "B", 2)).generateVisit(
