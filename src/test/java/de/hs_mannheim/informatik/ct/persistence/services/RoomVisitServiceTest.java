@@ -46,6 +46,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.lessThan;
+import static org.mockito.Mockito.validateMockitoUsage;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension.class)
@@ -210,7 +211,7 @@ class RoomVisitServiceTest {
     }
 
     @Test
-    void resetEmptyRoom(){
+    void resetEmptyRoom() {
         Room emptyRoom = new Room("A", "B", 2);
 
         Mockito.when(roomVisitRepository.findNotCheckedOutVisits(emptyRoom))
@@ -222,38 +223,40 @@ class RoomVisitServiceTest {
 
         Mockito.verify(roomVisitRepository, Mockito.times(1))
                 .saveAll(roomVisitCaptor.capture());
+    }
+
     @Test
     void resetRoom(){
         Visitor visitor = new Visitor("visitor");
         RoomVisit visit = new RoomVisitHelper(new Room("A", "B", 2)).generateVisit(
                 visitor,
-                LocalDateTime.now(),
+                now,
                 null
         );
-        Room testRoom = visit.getRoom();
 
-        Mockito.when(roomVisitRepository.findNotCheckedOutVisits()).thenReturn(
-          Collections.singletonList(visit)
-        );
+        Room filledRoom = visit.getRoom();
 
-        roomVisitService.resetRoom(testRoom);
+        Mockito.when(roomVisitRepository.findNotCheckedOutVisits(filledRoom))
+                .thenReturn(Collections.singletonList(visit));
 
-        Mockito.verify(roomVisitRepository).findNotCheckedOutVisits();
+        Mockito.when(dateTimeService.getDateNow())
+                .thenReturn(java.util.Date.from(today.atStartOfDay()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()));
 
-        Mockito.verify(roomVisit, Mockito.atLeast(1)).checkOut(
-                ArgumentMatchers.any(Date.class),
-                RoomVisit.CheckOutSource.RoomReset
-        );
+        roomVisitService.resetRoom(filledRoom);
 
-        Mockito.verify(roomVisitRepository).saveAll(roomVisitCaptor.capture());
+        Mockito.verify(roomVisitRepository).findNotCheckedOutVisits(filledRoom);
 
-        assertThat(roomVisitService.getVisitorCount(testRoom), equalTo(0));
+        Mockito.verify(roomVisitRepository, Mockito.times(1))
+                .saveAll(roomVisitCaptor.capture());
+
+        assertThat(roomVisitService.getVisitorCount(filledRoom), equalTo(0));
     }
 
     @Test
     void resetFilledRoom(){
         Visitor visitor = new Visitor("visitor");
-        }
         RoomVisit visit = new RoomVisitHelper(new Room("A", "B", 2)).generateVisit(
                 visitor,
                 this.now,
