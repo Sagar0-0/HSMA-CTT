@@ -24,6 +24,8 @@ import de.hs_mannheim.informatik.ct.model.Visitor;
 import de.hs_mannheim.informatik.ct.persistence.RoomVisitHelper;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
 import lombok.val;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
+<<<<<<< HEAD
 import java.util.Arrays;
 import java.util.List;
+=======
+import java.util.*;
+>>>>>>> d27a60f (added RoomVisitRepo tests. Needs refactoring)
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,12 +61,23 @@ public class RoomVisitRepositoryTest {
     @Autowired
     private RoomVisitRepository roomVisitRepository;
 
-<<<<<<< HEAD
     private List<RoomVisit> visits;
 
-=======
-    //
->>>>>>> 533bc83 (created todos)
+    @BeforeEach
+    public void setUp(){
+        Room room = new Room("Test", "Test", 20);
+        RoomVisitHelper roomVisitHelper = new RoomVisitHelper(entityManager.persist(room));
+        Visitor visitor = entityManager.persist(new Visitor("email"));
+
+        this.visits = Stream.of(
+                roomVisitHelper.generateVisit(
+                        visitor,
+                        LocalDateTime.now(),
+                        null
+                )
+        ).collect(Collectors.toList());
+    }
+
     @Test
     public void deleteExpiredVisits() {
         val roomVisitHelper = new RoomVisitHelper(entityManager.persist(
@@ -103,7 +120,6 @@ public class RoomVisitRepositoryTest {
         assertThat(contacts, everyItem(hasProperty("targetVisit", equalTo(targetVisit))));
     }
 
-<<<<<<< HEAD
     @Test
     public void findNotCheckedOutVisitsTest() {
         altSetUp();
@@ -280,7 +296,4 @@ public class RoomVisitRepositoryTest {
 
         return Arrays.asList(visitsList);
     }
-=======
-
->>>>>>> 533bc83 (created todos)
 }
