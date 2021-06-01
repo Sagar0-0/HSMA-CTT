@@ -29,15 +29,7 @@ import de.hs_mannheim.informatik.ct.persistence.repositories.RoomVisitRepository
 import de.hs_mannheim.informatik.ct.persistence.repositories.VisitorRepository;
 import lombok.NonNull;
 import lombok.val;
-<<<<<<< HEAD
 import org.junit.jupiter.api.*;
-=======
-import org.apache.commons.math3.exception.util.ArgUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
->>>>>>> 946fdff (basic tests working)
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -339,6 +331,7 @@ class RoomVisitServiceTest {
 
         assertThat(roomVisitService.getVisitorCount(fullRoom), equalTo(0));
     }
+
 
     /**
      * resets a Room with visitors who already checked out and others who did not
