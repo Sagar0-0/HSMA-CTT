@@ -23,7 +23,6 @@ import de.hs_mannheim.informatik.ct.model.CheckOutSource;
 import de.hs_mannheim.informatik.ct.model.Room;
 import de.hs_mannheim.informatik.ct.model.RoomVisit;
 import de.hs_mannheim.informatik.ct.model.Visitor;
-import de.hs_mannheim.informatik.ct.persistence.InvalidEmailException;
 import de.hs_mannheim.informatik.ct.persistence.RoomVisitHelper;
 import de.hs_mannheim.informatik.ct.persistence.repositories.RoomRepository;
 import de.hs_mannheim.informatik.ct.persistence.repositories.RoomVisitRepository;
@@ -33,7 +32,6 @@ import lombok.val;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -81,6 +79,7 @@ class RoomVisitServiceTest {
     private ArgumentCaptor<List<RoomVisit>> roomVisitCaptor;
 
     private AutoCloseable mocks;
+
     private LocalDate today = LocalDate.of(2021, Month.APRIL, 2);
     private LocalDateTime now = LocalDateTime.of(today, LocalTime.of(18, 1));
 
@@ -335,24 +334,21 @@ class RoomVisitServiceTest {
     }
 
     @Test
-    void resetRoom_withEndDate(){
-        Room testRoom = new Room("A", "B", 1);
-        Visitor visitor = new Visitor("visitor");
-        RoomVisit visit = new RoomVisitHelper(new Room("A", "B", 1)).generateVisit(
-                visitor,
-                this.now,
-                this.now.plusMinutes(1)
-        );
+    void resetRoomExpiredRecords()  {
+        Visitor expiredVisitor = new Visitor("exp");
+        Visitor notexpiredVisitor = new Visitor("nexp");
+        Room testRoom = new Room("A", "B", 4);
+        List<RoomVisit> visits = new RoomVisitHelper(testRoom).generateExpirationTestData(expiredVisitor, notexpiredVisitor);
 
         // setup
         Mockito.when(roomVisitRepository.findNotCheckedOutVisits(testRoom))
-                .thenReturn(Collections.singletonList(visit));
+                .thenReturn(visits);
 
         Mockito.when(dateTimeService.getDateNow())
-                .thenReturn(java.util.Date.from(today.atStartOfDay()
+                .thenReturn(java.util.Date.from(this.today.atStartOfDay()
                         .atZone(ZoneId.systemDefault())
                         .toInstant()));
-
+        
     /**
      * resets a Room with visitors who already checked out and others who did not
      */
