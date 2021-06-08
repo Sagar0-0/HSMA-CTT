@@ -231,7 +231,6 @@ public class RoomVisitRepositoryTest {
     }
 
     /**
-<<<<<<< HEAD
      * alternativ setup method. If this is set as default @Before Method some methods wont run
      */
     private void altSetUp() {
@@ -249,8 +248,6 @@ public class RoomVisitRepositoryTest {
     }
 
     /**
-=======
->>>>>>> d27a60f (added RoomVisitRepo tests. Needs refactoring)
      * Generates a List of RoomVisits for given Room. The Visitor names are created as visitor0 - visitorX where X is @param visitorAmount
      *
      * @param room          Room object the generated visitors will visit.
