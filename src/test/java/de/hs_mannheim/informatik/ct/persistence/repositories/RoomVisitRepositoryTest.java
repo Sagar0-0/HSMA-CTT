@@ -24,7 +24,6 @@ import de.hs_mannheim.informatik.ct.model.Visitor;
 import de.hs_mannheim.informatik.ct.persistence.RoomVisitHelper;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
 import lombok.val;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +32,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
-<<<<<<< HEAD
 import java.util.Arrays;
 import java.util.List;
-=======
-import java.util.*;
->>>>>>> d27a60f (added RoomVisitRepo tests. Needs refactoring)
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,21 +50,6 @@ public class RoomVisitRepositoryTest {
     private RoomVisitRepository roomVisitRepository;
 
     private List<RoomVisit> visits;
-
-    @BeforeEach
-    public void setUp(){
-        Room room = new Room("Test", "Test", 20);
-        RoomVisitHelper roomVisitHelper = new RoomVisitHelper(entityManager.persist(room));
-        Visitor visitor = entityManager.persist(new Visitor("email"));
-
-        this.visits = Stream.of(
-                roomVisitHelper.generateVisit(
-                        visitor,
-                        LocalDateTime.now(),
-                        null
-                )
-        ).collect(Collectors.toList());
-    }
 
     @Test
     public void deleteExpiredVisits() {
@@ -267,6 +247,22 @@ public class RoomVisitRepositoryTest {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * alternativ setup method. If this is set as default @Before Method some methods wont run
+     */
+    private void altSetUp(){
+        Room room = new Room("Test", "Test", 20);
+        RoomVisitHelper roomVisitHelper = new RoomVisitHelper(entityManager.persist(room));
+        Visitor visitor = entityManager.persist(new Visitor("email"));
+
+        this.visits = Stream.of(
+                roomVisitHelper.generateVisit(
+                        visitor,
+                        LocalDateTime.now(),
+                        null
+                )
+        ).collect(Collectors.toList());
+    }
     /**
      * Generates a List of RoomVisits for given Room. The Visitor names are created as visitor0 - visitorX where X is @param visitorAmount
      *
