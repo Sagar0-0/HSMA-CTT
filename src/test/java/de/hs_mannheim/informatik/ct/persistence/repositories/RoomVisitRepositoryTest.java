@@ -265,6 +265,22 @@ public class RoomVisitRepositoryTest {
         ).collect(Collectors.toList());
     }
     /**
+     * alternativ setup method. If this is set as default @Before Method some methods wont run
+     */
+    private void altSetUp(){
+        Room room = new Room("Test", "Test", 20);
+        RoomVisitHelper roomVisitHelper = new RoomVisitHelper(entityManager.persist(room));
+        Visitor visitor = entityManager.persist(new Visitor("email"));
+
+        this.visits = Stream.of(
+                roomVisitHelper.generateVisit(
+                        visitor,
+                        LocalDateTime.now(),
+                        null
+                )
+        ).collect(Collectors.toList());
+    }
+    /**
      * Generates a List of RoomVisits for given Room. The Visitor names are created as visitor0 - visitorX where X is @param visitorAmount
      *
      * @param room          Room object the generated visitors will visit.
