@@ -336,9 +336,10 @@ class RoomVisitServiceTest {
     @Test
     void resetRoomExpiredRecords()  {
         Visitor expiredVisitor = new Visitor("exp");
-        Visitor notexpiredVisitor = new Visitor("nexp");
+        Visitor notExpiredVisitor = new Visitor("nexp");
         Room testRoom = new Room("A", "B", 4);
-        List<RoomVisit> visits = new RoomVisitHelper(testRoom).generateExpirationTestData(expiredVisitor, notexpiredVisitor);
+        // adds expired and not expired visitors
+        List<RoomVisit> visits = new RoomVisitHelper(testRoom).generateExpirationTestData(expiredVisitor, notExpiredVisitor);
 
         // setup
         Mockito.when(roomVisitRepository.findNotCheckedOutVisits(testRoom))
