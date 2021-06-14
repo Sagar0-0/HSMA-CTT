@@ -54,10 +54,13 @@ public class RoomVisitTest {
     @MockBean
     private Visitor visitor;
 
+
     private LocalDateTime now = LocalDateTime.now();
 
     @Test
-    void checkout() {
+    void checkout(){
+        LocalDateTime now = LocalDateTime.now();
+        RoomVisit checkOutSourceProvider = new RoomVisit(visitor, room, TimeUtil.convertToDate(now));
         RoomVisit roomVisit = new RoomVisit(
                 room,
                 null,
