@@ -333,6 +333,9 @@ class RoomVisitServiceTest {
         assertThat(roomVisitService.getVisitorCount(fullRoom), equalTo(0));
     }
 
+    /**
+     * resets a Room with visitors who already checked out and others who did not
+     */
     @Test
     void resetRoomExpiredRecords()  {
         Visitor expiredVisitor = new Visitor("exp");
@@ -372,7 +375,7 @@ class RoomVisitServiceTest {
 
         // method call
         Assertions.assertThrows(AssertionError.class, () -> roomVisitService.resetRoom(testRoom));
-        
+
         // behavior validation
         Mockito.verify(roomVisitRepository).findNotCheckedOutVisits(testRoom);
 
