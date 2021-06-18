@@ -1,6 +1,5 @@
 package de.hs_mannheim.informatik.ct.model;
 
-<<<<<<< HEAD
 import de.hs_mannheim.informatik.ct.util.ScheduledMaintenanceTasks;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
 import org.junit.jupiter.api.*;
@@ -12,29 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
-=======
-import de.hs_mannheim.informatik.ct.persistence.repositories.RoomVisitRepository;
-import de.hs_mannheim.informatik.ct.persistence.repositories.VisitorRepository;
-import de.hs_mannheim.informatik.ct.persistence.services.DateTimeService;
-import de.hs_mannheim.informatik.ct.persistence.services.RoomVisitService;
-import de.hs_mannheim.informatik.ct.util.TimeUtil;
-import org.aspectj.weaver.tools.cache.CacheKeyResolver;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
->>>>>>> c62b200 (first checkout test)
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.*;
