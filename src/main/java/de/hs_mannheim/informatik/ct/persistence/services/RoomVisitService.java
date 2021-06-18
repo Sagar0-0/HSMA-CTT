@@ -193,5 +193,4 @@ public class RoomVisitService implements VisitService<RoomVisit> {
         String[] roomNames = studyRooms.split(";");
         return roomVisitRepository.getAllStudyRooms(roomNames);
     }
-
 }
