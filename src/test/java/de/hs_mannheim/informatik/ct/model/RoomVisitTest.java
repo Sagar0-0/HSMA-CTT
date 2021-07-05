@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
@@ -54,12 +55,10 @@ public class RoomVisitTest {
     @MockBean
     private Visitor visitor;
 
-
     private LocalDateTime now = LocalDateTime.now();
 
     @Test
     void checkout(){
-        LocalDateTime now = LocalDateTime.now();
         RoomVisit checkOutSourceProvider = new RoomVisit(visitor, room, TimeUtil.convertToDate(now));
         RoomVisit roomVisit = new RoomVisit(
                 room,
@@ -67,7 +66,7 @@ public class RoomVisitTest {
                 TimeUtil.convertToDate(now.minusDays(1)),
                 TimeUtil.convertToDate(now),
                 visitor,
-                CheckOutSource.NotCheckedOut);
+                checkOutSourceProvider.getCheckOutSource());
 
         roomVisit.checkOut(TimeUtil.convertToDate(now), CheckOutSource.RoomReset);
 
@@ -76,18 +75,18 @@ public class RoomVisitTest {
     }
 
     @Test
-    void checkout_checkOutSources() {
+    void checkout_checkOutSources(){
         Date validDate = TimeUtil.convertToDate(now);
 
         // no matter which check out source is used. The user will get checked out
-        for (CheckOutSource checkOutSource : CheckOutSource.values()) {
+        for(CheckOutSource checkOutSource : CheckOutSource.values()){
             RoomVisit roomVisit = checkOutCall(validDate, checkOutSource);
-            assertThat(roomVisit.getEndDate(), notNullValue());
             assertThat(roomVisit.getCheckOutSource(), not(CheckOutSource.NotCheckedOut));
         }
     }
 
     @Test
+
     void automaticCheckOutFailureData_checkOut() {
         Date validDate = TimeUtil.convertToDate(now);
 
@@ -197,7 +196,6 @@ public class RoomVisitTest {
         );
 
         roomVisit.checkOut(TimeUtil.convertToDate(now), CheckOutSource.RoomReset);
-
         return roomVisit;
     }
 }
