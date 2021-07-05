@@ -8,7 +8,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
@@ -84,8 +83,6 @@ public class RoomVisitTest {
             assertThat(roomVisit.getCheckOutSource(), not(CheckOutSource.NotCheckedOut));
         }
     }
-
-    @Test
 
     void automaticCheckOutFailureData_checkOut() {
         Date validDate = TimeUtil.convertToDate(now);
