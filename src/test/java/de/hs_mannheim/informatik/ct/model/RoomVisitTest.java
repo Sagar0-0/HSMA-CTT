@@ -66,7 +66,7 @@ public class RoomVisitTest {
                 TimeUtil.convertToDate(now.minusDays(1)),
                 TimeUtil.convertToDate(now),
                 visitor,
-                checkOutSourceProvider.getCheckOutSource());
+                CheckOutSource.NotCheckedOut);
 
         roomVisit.checkOut(TimeUtil.convertToDate(now), CheckOutSource.RoomReset);
 
@@ -192,6 +192,20 @@ public class RoomVisitTest {
                 TimeUtil.convertToDate(now.minusDays(1)),
                 checkOutDate,
                 visitor,
+                checkOutSource
+        );
+
+        roomVisit.checkOut(TimeUtil.convertToDate(now), CheckOutSource.RoomReset);
+        return roomVisit;
+    }
+
+    private RoomVisit checkOutCall(Date checkOutDate, CheckOutSource checkOutSource, Room customRoom, Visitor customVisitor){
+        RoomVisit roomVisit = new RoomVisit(
+                customRoom,
+                null,
+                TimeUtil.convertToDate(now.minusDays(1)),
+                checkOutDate,
+                customVisitor,
                 checkOutSource
         );
 
