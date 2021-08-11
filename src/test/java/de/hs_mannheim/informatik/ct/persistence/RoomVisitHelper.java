@@ -57,7 +57,7 @@ public class RoomVisitHelper {
      * Generates a list of room visits, some of which should be delete because they are after the expiration date for personal data.
      *
      * @param expiredVisitor    The visitor used for visits that should be deleted
-     * @param notExpiredVisitor The vistor used for visits that are still valid
+     * @param notExpiredVisitor The visitor used for visits that are still valid
      */
     public List<RoomVisit> generateExpirationTestData(Visitor expiredVisitor, Visitor notExpiredVisitor) {
         val roomVisits = new ArrayList<RoomVisit>();
