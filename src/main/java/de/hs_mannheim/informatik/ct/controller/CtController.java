@@ -25,11 +25,15 @@ import de.hs_mannheim.informatik.ct.persistence.InvalidExternalUserdataException
 import de.hs_mannheim.informatik.ct.persistence.RoomFullException;
 import de.hs_mannheim.informatik.ct.persistence.services.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,8 +87,19 @@ public class CtController {
     private String host;
 
     @RequestMapping("/")
-    public String home(Model model) {
+    public String home(Model model, @CookieValue(value = "checked-in", defaultValue = "false") String checkedIn) {
         model.addAttribute("freeLearnerPlaces", roomVisitService.getRemainingStudyPlaces());
+        model.addAttribute("cookie", checkedIn);
+//        ResponseCookie springCookie = ResponseCookie.from("user-id", "test")
+//                .secure(true)
+//                .path("/")
+//                .maxAge(3000)
+//                .domain("/test")
+//                .build();
+//
+//        ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).build();
+//
+//        System.out.println("Mein Cookie: " + springCookie);
         return "index";
     }
 
@@ -110,6 +125,46 @@ public class CtController {
         }
 
         return "neue";
+    }
+
+//    @RequestMapping("/test")
+//    public String readCookie(@CookieValue(value = "username", defaultValue = "Atta") String username) {
+//        System.out.println("Hey! My username is " + username);
+//    }
+
+    @GetMapping("/cookie-check-in")
+    public void setCookieTrue(HttpServletResponse response) {
+        // create a cookie
+        Cookie cookie = new Cookie("checked-in", "true");
+
+        //add cookie to response
+        response.addCookie(cookie);
+
+        System.out.println("changed cookie to checked in");
+    }
+
+    @GetMapping("/cookie-check-not")
+    public void setCookieFalse(HttpServletResponse response) {
+        // create a cookie
+        Cookie cookie = new Cookie("checked-in", "test");
+
+        cookie.setMaxAge(10);
+
+        //add cookie to response
+        response.addCookie(cookie);
+
+        System.out.println("changed cookie to test");
+    }
+    @GetMapping("/cookie-delete")
+    public void deleteCookie(HttpServletResponse response) {
+        // create a cookie
+        Cookie cookie = new Cookie("checked-in", "test");
+        cookie.setMaxAge(0);
+
+        //add cookie to response
+        response.addCookie(cookie);
+
+        System.out.println("changed cookie to test");
     }
 
     @RequestMapping("/besuch")

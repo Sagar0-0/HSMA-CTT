@@ -33,8 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -118,6 +117,8 @@ public class RoomController {
   
         val room = getRoomOrThrow(visitData.getRoomId());
 
+        System.out.println("der scheiß raumpin: " + room.getRoomPin());
+
         if (!visitData.getRoomPin().equals(room.getRoomPin()))
             throw new InvalidRoomPinException();
 
@@ -154,8 +155,12 @@ public class RoomController {
 
         model.addAttribute("visitData", visitData);
 
+
+
         return "rooms/checkedIn";
     }
+
+
 
     private void roomPinValidation(Data visitData) throws InvalidRoomPinException {
         try{
