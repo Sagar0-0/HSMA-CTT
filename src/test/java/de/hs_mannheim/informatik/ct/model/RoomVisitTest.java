@@ -1,13 +1,10 @@
 package de.hs_mannheim.informatik.ct.model;
 
-import de.hs_mannheim.informatik.ct.persistence.services.RoomVisitService;
 import de.hs_mannheim.informatik.ct.util.ScheduledMaintenanceTasks;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -50,12 +47,6 @@ public class RoomVisitTest {
     public void releaseMocks() throws Exception {
         mocks.close();
     }
-
-    @MockBean
-    private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
-
-    @MockBean
-    private RoomVisitService roomVisitService;
 
     @MockBean
     private Room room;
@@ -126,6 +117,8 @@ public class RoomVisitTest {
 
         Room[] rooms = createRooms_automaticCheckoutFailureData();
         Visitor[] visitors = createVisitors_automaticCheckOutFailureData();
+
+        ScheduledMaintenanceTasks scheduledMaintenanceTasks = new ScheduledMaintenanceTasks();
 
         for(int i = 0; i < visitors.length; i++){
             RoomVisit roomVisit = new RoomVisit(
