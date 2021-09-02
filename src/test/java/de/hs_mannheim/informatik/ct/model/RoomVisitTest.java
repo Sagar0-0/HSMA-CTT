@@ -1,5 +1,6 @@
 package de.hs_mannheim.informatik.ct.model;
 
+import de.hs_mannheim.informatik.ct.persistence.services.RoomVisitService;
 import de.hs_mannheim.informatik.ct.util.ScheduledMaintenanceTasks;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
 import org.junit.jupiter.api.*;
@@ -47,6 +48,12 @@ public class RoomVisitTest {
     public void releaseMocks() throws Exception {
         mocks.close();
     }
+
+    @MockBean
+    private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
+
+    @MockBean
+    private RoomVisitService roomVisitService;
 
     @MockBean
     private Room room;
@@ -152,7 +159,6 @@ public class RoomVisitTest {
 
     /**
      * Creates objects after a db dump where users did not get checked automatically
-<<<<<<< HEAD
      *
      * @return visitors that did not get checked out
      */
@@ -168,7 +174,6 @@ public class RoomVisitTest {
 
     /**
      * Creates objects after a db dump where users did not get checked automatically
-<<<<<<< HEAD
      *
      * @return censored rooms
      */
@@ -183,7 +188,6 @@ public class RoomVisitTest {
 
     /**
      * Imitates check out for given checkOutSource by creating RoomVisit and checking out visitor.
-<<<<<<< HEAD
      *
      * @param checkOutDate   Date Object specifying user check out
      * @param checkOutSource Entry from CheckOutSource specifying why user got checked out
