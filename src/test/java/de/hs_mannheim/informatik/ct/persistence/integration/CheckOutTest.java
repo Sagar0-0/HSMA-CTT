@@ -21,11 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.cache.support.NullValue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -69,7 +71,7 @@ public class CheckOutTest {
     private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
 
     @Test
-    void recurringForceCheckOut(){
+    void recurringForceCheckOut_midnight(){
         Room room = new Room("Test", "Test", 20);
         RoomVisitHelper roomVisitHelper = new RoomVisitHelper(entityManager.persist(room));
         Visitor expiredVisitor = entityManager.persist(new Visitor("expired"));
@@ -92,6 +94,29 @@ public class CheckOutTest {
     }
 
     @Test
+    void recurringForceCheckOut_morning(){
+        Room room = new Room("Test", "Test", 20);
+        RoomVisitHelper roomVisitHelper = new RoomVisitHelper(entityManager.persist(room));
+        Visitor expiredVisitor = entityManager.persist(new Visitor("expired"));
+
+        RoomVisit roomVisit = new RoomVisit(
+                room,
+                null,
+                TimeUtil.convertToDate(LocalDateTime.now().withHour(1)),
+                null,
+                expiredVisitor,
+                CheckOutSource.NotCheckedOut
+        );
+
+        roomVisitRepository.save(roomVisit);
+        // forcing check out at 03:55
+        scheduledMaintenanceTasks.signOutAllVisitors(LocalTime.of(3, 55));
+
+        assertThat(roomVisitRepository.getRoomVisitorCount(room), is(0));
+        assertThat(roomVisit.getCheckOutSource(), is(CheckOutSource.AutomaticCheckout));
+    }
+
+    @Test
     void dailyForcedCheckOut() {
         Room room = new Room("Test", "Test", 20);
         RoomVisitHelper roomVisitHelper = new RoomVisitHelper(entityManager.persist(room));
@@ -99,8 +124,7 @@ public class CheckOutTest {
         Visitor notExpiredVisitor = entityManager.persist(new Visitor("not-expired"));
         Visitor almostExpiredVisitor = entityManager.persist(new Visitor("some-expired"));
 
-        List<RoomVisit> roomVisits = roomVisitHelper.generateExpirationTestData(expiredVisitor, notExpiredVisitor);
-
+        List<RoomVisit> roomVisits = new ArrayList<RoomVisit>();
         // visitor that checked in yesterday
         // getting checked out
         roomVisits.add(roomVisitHelper.generateVisit(
@@ -129,14 +153,16 @@ public class CheckOutTest {
         scheduledMaintenanceTasks.signOutAllVisitors(LocalTime.of(0, 0));
 
         assertThat(roomVisitRepository.getRoomVisitorCount(room), equalTo(1));
-        //
-        assertThat(roomVisitRepository.findNotCheckedOutVisits(),
-                everyItem(hasProperty("visitor", anyOf(
-                        equalTo(notExpiredVisitor),
-                        equalTo(almostExpiredVisitor),
-                        equalTo(expiredVisitor)
-                )))
-        );
-
+        // this filters the one not expired user and checks if he is for sure not checked out.
+        // The other visitors can be checked with same parameters.
+        for(RoomVisit rv : roomVisits) {
+            if (rv.getVisitor() == notExpiredVisitor) {
+                assertThat(rv.getCheckOutSource(), is(CheckOutSource.NotCheckedOut));
+                assertThat(rv.getEndDate(), is(nullValue()));
+            } else {
+                assertThat(rv.getCheckOutSource(), is(CheckOutSource.AutomaticCheckout));
+                assertThat(rv.getEndDate(), lessThan(TimeUtil.convertToDate(LocalDateTime.now())));
+            }
+        }
     }
 }
