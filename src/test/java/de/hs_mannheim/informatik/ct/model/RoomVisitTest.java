@@ -2,6 +2,7 @@ package de.hs_mannheim.informatik.ct.model;
 
 import de.hs_mannheim.informatik.ct.util.ScheduledMaintenanceTasks;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
+import lombok.val;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
@@ -10,7 +11,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -120,7 +123,7 @@ public class RoomVisitTest {
         Visitor[] visitors = createVisitors_automaticCheckOutFailureData();
 
         ScheduledMaintenanceTasks scheduledMaintenanceTasks = new ScheduledMaintenanceTasks();
-
+        
         for (int i = 0; i < visitors.length; i++) {
             RoomVisit roomVisit = new RoomVisit(
                     rooms[i],
@@ -129,12 +132,14 @@ public class RoomVisitTest {
                     validDate,
                     visitors[i],
                     CheckOutSource.AutomaticCheckout
-            );
-
-            scheduledMaintenanceTasks.signOutAllVisitors(LocalTime.now());
-            assertThat(roomVisit.getEndDate(), notNullValue());
-            assertThat(roomVisit.getCheckOutSource(), not(CheckOutSource.NotCheckedOut));
+             ));
         }
+
+        }
+        scheduledMaintenanceTasks.signOutAllVisitors(LocalTime.now());
+
+        assertThat(roomVisit.getEndDate(), notNullValue());
+        assertThat(roomVisit.getCheckOutSource(), not(CheckOutSource.NotCheckedOut));
     }
 
 
