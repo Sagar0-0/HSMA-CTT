@@ -1,6 +1,5 @@
 package de.hs_mannheim.informatik.ct.model;
 
-import de.hs_mannheim.informatik.ct.persistence.services.RoomVisitService;
 import de.hs_mannheim.informatik.ct.util.ScheduledMaintenanceTasks;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
 import org.junit.jupiter.api.*;
@@ -48,12 +47,6 @@ public class RoomVisitTest {
     public void releaseMocks() throws Exception {
         mocks.close();
     }
-
-    @MockBean
-    private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
-
-    @MockBean
-    private RoomVisitService roomVisitService;
 
     @MockBean
     private Room room;
