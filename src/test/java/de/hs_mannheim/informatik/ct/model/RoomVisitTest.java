@@ -2,7 +2,6 @@ package de.hs_mannheim.informatik.ct.model;
 
 import de.hs_mannheim.informatik.ct.util.ScheduledMaintenanceTasks;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
-import lombok.val;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
@@ -11,9 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -61,7 +58,6 @@ public class RoomVisitTest {
 
     @Test
     void checkout(){
-        RoomVisit checkOutSourceProvider = new RoomVisit(visitor, room, TimeUtil.convertToDate(now));
         RoomVisit roomVisit = new RoomVisit(
                 room,
                 null,
@@ -97,7 +93,7 @@ public class RoomVisitTest {
         Visitor[] visitors = createVisitors_automaticCheckOutFailureData();
         Room[] rooms = createRooms_automaticCheckoutFailureData();
 
-        for (int i = 0; i < visitors.length; i++) {
+        for(int i = 0; i < visitors.length; i++){
             RoomVisit roomVisit = new RoomVisit(
                     rooms[i],
                     idArray[i],
@@ -124,7 +120,7 @@ public class RoomVisitTest {
 
         ScheduledMaintenanceTasks scheduledMaintenanceTasks = new ScheduledMaintenanceTasks();
 
-        for (int i = 0; i < visitors.length; i++) {
+        for(int i = 0; i < visitors.length; i++){
             RoomVisit roomVisit = new RoomVisit(
                     rooms[i],
                     idArray[i],
@@ -132,9 +128,8 @@ public class RoomVisitTest {
                     validDate,
                     visitors[i],
                     CheckOutSource.AutomaticCheckout
-             );
+            );
         }
-
         // big todo
         //scheduledMaintenanceTasks.signOutAllVisitors(LocalTime.now());
 
@@ -151,16 +146,13 @@ public class RoomVisitTest {
      *         194 |          |2021 - 07 - 01 12:43:08.854 | r3        | 193        | 0
      *         133 |          |2021 - 06 - 20 12:07:31.253 | r4        | 27         |
      *         123 |          |2021 - 06 - 17 15:05:49.142 | r5        | 122        |
-
-
      */
 
     /**
      * Creates objects after a db dump where users did not get checked automatically
-     *
      * @return visitors that did not get checked out
      */
-    private Visitor[] createVisitors_automaticCheckOutFailureData() {
+    private Visitor[] createVisitors_automaticCheckOutFailureData(){
         Visitor visitor1 = new Visitor(187L, "v1");
         Visitor visitor2 = new Visitor(191L, "v2");
         Visitor visitor3 = new Visitor(193L, "v3");
@@ -172,10 +164,9 @@ public class RoomVisitTest {
 
     /**
      * Creates objects after a db dump where users did not get checked automatically
-     *
      * @return censored rooms
      */
-    private Room[] createRooms_automaticCheckoutFailureData() {
+    private Room[] createRooms_automaticCheckoutFailureData(){
         Room room1 = new Room("r1", "L", 10);
         Room room2 = new Room("r2", "L", 10);
         Room room4 = new Room("r3", "K", 10);
@@ -186,12 +177,11 @@ public class RoomVisitTest {
 
     /**
      * Imitates check out for given checkOutSource by creating RoomVisit and checking out visitor.
-     *
-     * @param checkOutDate   Date Object specifying user check out
+     * @param checkOutDate Date Object specifying user check out
      * @param checkOutSource Entry from CheckOutSource specifying why user got checked out
      * @return room visit with user checked out
      */
-    private RoomVisit checkOutCall(Date checkOutDate, CheckOutSource checkOutSource) {
+    private RoomVisit checkOutCall(Date checkOutDate, CheckOutSource checkOutSource){
         RoomVisit roomVisit = new RoomVisit(
                 room,
                 null,

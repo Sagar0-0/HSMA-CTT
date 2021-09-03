@@ -24,6 +24,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 
+
 @Entity
 @Getter
 @AllArgsConstructor
@@ -65,7 +66,6 @@ public class RoomVisit implements Visit {
     }
 
     public void checkOut(@NonNull Date checkOutDate, @NonNull CheckOutSource reason) {
-
         // normal check out
         // or enddate was set but user did not got checked out
         if (endDate == null && reason != CheckOutSource.NotCheckedOut) {
