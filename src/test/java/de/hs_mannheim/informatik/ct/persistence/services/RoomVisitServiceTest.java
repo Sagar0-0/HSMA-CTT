@@ -83,18 +83,6 @@ class RoomVisitServiceTest {
     private LocalDate today = LocalDate.of(2021, Month.APRIL, 2);
     private LocalDateTime now = LocalDateTime.of(today, LocalTime.of(18, 1));
 
-    private LocalDate today = LocalDate.of(2021, Month.APRIL, 2);
-    private LocalDateTime now = LocalDateTime.of(today, LocalTime.of(18, 1));
-
-    private LocalDate today = LocalDate.of(2021, Month.APRIL, 2);
-    private LocalDateTime now = LocalDateTime.of(today, LocalTime.of(18, 1));
-
-    private LocalDate today = LocalDate.of(2021, Month.APRIL, 2);
-    private LocalDateTime now = LocalDateTime.of(today, LocalTime.of(18, 1));
-
-    private LocalDate today = LocalDate.of(2021, Month.APRIL, 2);
-    private LocalDateTime now = LocalDateTime.of(today, LocalTime.of(18, 1));
-
     @BeforeEach
     public void openMocks() {
         mocks = MockitoAnnotations.openMocks(this);
@@ -352,29 +340,9 @@ class RoomVisitServiceTest {
                 .thenReturn(java.util.Date.from(this.today.atStartOfDay()
                         .atZone(ZoneId.systemDefault())
                         .toInstant()));
-        
-    /**
-     * resets a Room with visitors who already checked out and others who did not
-     */
-    @Test
-    void resetRoomExpiredRecords()  {
-        Visitor expiredVisitor = new Visitor("exp");
-        Visitor notExpiredVisitor = new Visitor("nexp");
-        Room testRoom = new Room("A", "B", 4);
-        // adds expired and not expired visitors
-        List<RoomVisit> visits = new RoomVisitHelper(testRoom).generateExpirationTestData(expiredVisitor, notExpiredVisitor);
-
-        // setup
-        Mockito.when(roomVisitRepository.findNotCheckedOutVisits(testRoom))
-                .thenReturn(visits);
-
-        Mockito.when(dateTimeService.getDateNow())
-                .thenReturn(java.util.Date.from(this.today.atStartOfDay()
-                        .atZone(ZoneId.systemDefault())
-                        .toInstant()));
 
         // method call
-        Assertions.assertThrows(AssertionError.class, () -> roomVisitService.resetRoom(testRoom));
+        roomVisitService.resetRoom(testRoom);
 
         // behavior validation
         Mockito.verify(roomVisitRepository).findNotCheckedOutVisits(testRoom);
