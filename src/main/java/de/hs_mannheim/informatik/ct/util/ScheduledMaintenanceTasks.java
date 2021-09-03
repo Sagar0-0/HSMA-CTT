@@ -54,7 +54,7 @@ public class ScheduledMaintenanceTasks {
     }
 
     public void signOutAllVisitors(LocalTime forcedEndTime) {
-        if (LocalTime.now().isAfter(forcedEndTime)) {
+        if (true){ //if (LocalTime.now().isAfter(forcedEndTime)) {
             roomVisitService.checkOutAllVisitors(forcedEndTime);
         }
     }
