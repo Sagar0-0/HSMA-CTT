@@ -1,7 +1,5 @@
 package de.hs_mannheim.informatik.ct.persistence.integration;
 
-
-
 import de.hs_mannheim.informatik.ct.model.CheckOutSource;
 import de.hs_mannheim.informatik.ct.model.Room;
 import de.hs_mannheim.informatik.ct.model.RoomVisit;
@@ -14,34 +12,24 @@ import de.hs_mannheim.informatik.ct.persistence.services.EventVisitService;
 import de.hs_mannheim.informatik.ct.persistence.services.RoomVisitService;
 import de.hs_mannheim.informatik.ct.util.ScheduledMaintenanceTasks;
 import de.hs_mannheim.informatik.ct.util.TimeUtil;
-<<<<<<< HEAD
-import org.hamcrest.MatcherAssert;
-=======
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
-import org.hibernate.annotations.Check;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.cache.support.NullValue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-<<<<<<< HEAD
-import java.util.Date;
 import java.util.List;
 
+import org.hamcrest.junit.MatcherAssert;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
-=======
-import java.util.List;
-
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
@@ -82,7 +70,6 @@ public class CheckOutTest {
     @Autowired
     private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
 
-<<<<<<< HEAD
     private LocalDateTime now = LocalDateTime.now();
 
     @Test
@@ -102,8 +89,6 @@ public class CheckOutTest {
         MatcherAssert.assertThat(roomVisit.getCheckOutSource(), not(CheckOutSource.NotCheckedOut));
     }
 
-=======
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
     @Test
     void recurringForceCheckOut_midnight(){
         Room room = new Room("Test", "Test", 20);
@@ -113,11 +98,7 @@ public class CheckOutTest {
         RoomVisit roomVisit = new RoomVisit(
                 room,
                 null,
-<<<<<<< HEAD
                 TimeUtil.convertToDate(now.minusDays(1).withHour(12)),
-=======
-                TimeUtil.convertToDate(LocalDateTime.now().minusDays(1).withHour(12)),
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
                 null,
                 expiredVisitor,
                 CheckOutSource.NotCheckedOut
@@ -140,11 +121,7 @@ public class CheckOutTest {
         RoomVisit roomVisit = new RoomVisit(
                 room,
                 null,
-<<<<<<< HEAD
                 TimeUtil.convertToDate(now.withHour(1)),
-=======
-                TimeUtil.convertToDate(LocalDateTime.now().withHour(1)),
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
                 null,
                 expiredVisitor,
                 CheckOutSource.NotCheckedOut
@@ -171,11 +148,7 @@ public class CheckOutTest {
         // getting checked out
         roomVisits.add(roomVisitHelper.generateVisit(
                 expiredVisitor,
-<<<<<<< HEAD
                 now.minusDays(1).withHour(12),
-=======
-                LocalDateTime.now().minusDays(1).withHour(12),
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
                 null
         ));
 
@@ -183,11 +156,7 @@ public class CheckOutTest {
         // not getting checked out
         roomVisits.add(roomVisitHelper.generateVisit(
                 almostExpiredVisitor,
-<<<<<<< HEAD
                 now.minusDays(1).withHour(23).withMinute(59),
-=======
-                LocalDateTime.now().minusDays(1).withHour(23).withMinute(59),
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
                 null
         ));
 
@@ -195,11 +164,7 @@ public class CheckOutTest {
         // not getting checked out
         roomVisits.add(roomVisitHelper.generateVisit(
                 notExpiredVisitor,
-<<<<<<< HEAD
                 now.withHour(12),
-=======
-                LocalDateTime.now().withHour(12),
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
                 null
         ));
 
@@ -215,17 +180,8 @@ public class CheckOutTest {
                 assertThat(rv.getEndDate(), is(nullValue()));
             } else {
                 assertThat(rv.getCheckOutSource(), is(CheckOutSource.AutomaticCheckout));
-<<<<<<< HEAD
                 assertThat(rv.getEndDate(), lessThan(TimeUtil.convertToDate(now)));
             }
         }
     }
-
-
-=======
-                assertThat(rv.getEndDate(), lessThan(TimeUtil.convertToDate(LocalDateTime.now())));
-            }
-        }
-    }
->>>>>>> 6bf1f441f45546efc46ae0aafee2c2043a0b32ad
 }
