@@ -255,6 +255,11 @@ public class RoomController {
             Model model) throws UnsupportedEncodingException {
 
         val visitorEmail = URLDecoder.decode(encodedVisitorEmail, "UTF-8");
+
+        val visitor = visitorService.findVisitorByEmail(visitorEmail);
+        if(!visitor.isPresent())
+            throw new VisitorNotFoundException();
+
         val room = roomService.getRoomOrThrow(roomId);
         val currentRoomVisitorCount = roomVisitService.getVisitorCount(room);
         val isRoomOvercrowded = room.getMaxCapacity() <= currentRoomVisitorCount;
