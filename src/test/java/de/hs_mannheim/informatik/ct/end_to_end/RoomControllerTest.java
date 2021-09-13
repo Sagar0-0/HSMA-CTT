@@ -131,11 +131,30 @@ public class RoomControllerTest {
 
     @Test
     public void openEventManagerPortal() throws Exception {
+        Room test = roomService.getRoomOrThrow("test");
+        fillRoom(test, 1);
         this.mockMvc.perform(
                 get("/r/"+TEST_ROOM_NAME+"/event-manager-portal")
                         .param("visitorEmail", TEST_USER_EMAIL)
                 )
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void openEventManagerPortalWithoutVisitorEmail() throws Exception {
+        this.mockMvc.perform(
+                get("/r/"+TEST_ROOM_NAME+"/event-manager-portal")
+        )
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void openEventManagerPortalWithEmptyVisitorEmail() throws Exception {
+        this.mockMvc.perform(
+                get("/r/"+TEST_ROOM_NAME+"/event-manager-portal")
+                        .param("visitorEmail", "")
+        )
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
