@@ -263,7 +263,6 @@ public class RoomController {
         val room = roomService.getRoomOrThrow(roomId);
         val currentRoomVisitorCount = roomVisitService.getVisitorCount(room);
         val isRoomOvercrowded = room.getMaxCapacity() <= currentRoomVisitorCount;
-        val redirectURI = URLEncoder.encode("/r/" + roomId + "/event-manager-portal?visitorEmail=" + encodedVisitorEmail, "UTF-8");
 
         val roomData = new Room.Data(room);
         model.addAttribute("roomData", roomData);
@@ -295,14 +294,12 @@ public class RoomController {
             @PathVariable String roomId,
             @RequestParam(required = true, value = "roomPin") Optional<String> roomPinRequested,
             Model model) {
-       
         try {
             if (!roomPinRequested.isPresent()) throw new Exception("roomPin not found");
             val roomPin = roomPinRequested.get();
             val room = roomService.getRoomOrThrow(roomId);
             if(!room.getRoomPin().equals(roomPin)) throw new Exception("roomPin invalid");
             roomVisitService.resetRoom(room);
-            
             return new RestResponse(true);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
