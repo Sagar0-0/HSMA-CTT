@@ -131,11 +131,13 @@ public class RoomControllerTest {
 
     @Test
     public void openEventManagerPortal() throws Exception {
+        Room testRoom = roomService.findByName(TEST_ROOM_NAME).get();
+        fillRoom(testRoom, 1);
         Room test = roomService.getRoomOrThrow("test");
         fillRoom(test, 1);
         this.mockMvc.perform(
                 get("/r/"+TEST_ROOM_NAME+"/event-manager-portal")
-                        .param("visitorEmail", TEST_USER_EMAIL)
+                        .param("visitorEmail", "0@stud.hs-mannheim.de")
                 )
                 .andExpect(status().isOk());
     }
