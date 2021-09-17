@@ -341,7 +341,7 @@ public class RoomController {
     /**
      * Gets an existing visitor by email or creates a new one. Throws a 'bad request' ResponseStatusException if an InvalidEmailException is thrown.
      *
-     * @param email The visitors email.
+     * @param visitData room visit data (email, name, number, address, ...).
      * @return The visitor.
      */
     private Visitor getOrCreateVisitorOrThrow(RoomVisit.Data visitData) throws
@@ -349,11 +349,22 @@ public class RoomController {
         return visitorService.findOrCreateVisitor(visitData.getVisitorEmail(), visitData.getName(), visitData.getNumber(), visitData.getAddress());
     }
 
+    /**
+     * checks if a transmitted room pin matches the actual room pin
+     *
+     * @param sendRoomPin transmitted room pin
+     * @param actualRoomPin actual room pin
+     */
     private void isRoomPinEqualOrThrow(String sendRoomPin, String actualRoomPin) throws InvalidRoomPinException {
         if (!sendRoomPin.equals(actualRoomPin))
             throw new InvalidRoomPinException();
     }
 
+    /**
+     * checks if a room pin has been initialized and is a numeric value
+     *
+     * @param roomPin
+     */
     private void isRoomPinValidOrThrow(String roomPin) throws InvalidRoomPinException {
         if(roomPin==null || roomPin.isEmpty()) throw new InvalidRoomPinException();
         try {
@@ -363,6 +374,13 @@ public class RoomController {
         }
     }
 
+    /**
+     * If the user is automatically checked out of the same room they're trying to
+     * check into, show them the checked out page instead (Auto checkout after scanning room qr code twice)
+     *
+     * @param room
+     * @param notCheckedOutVisits room visits which the visitor was checked in
+     */
     private boolean isVisitorCheckedOutOfSameRoom(Room room, List<RoomVisit> notCheckedOutVisits){
         if (notCheckedOutVisits.size() != 0) {
             val checkedOutRoom = notCheckedOutVisits.get(0).getRoom();
