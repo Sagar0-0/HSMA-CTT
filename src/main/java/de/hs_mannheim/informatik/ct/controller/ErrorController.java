@@ -54,6 +54,13 @@ public class ErrorController {
         return "error/errorTemplate";
     }
 
+    @ExceptionHandler({RoomController.UnprivilegedAccessException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public String handleUnprivilegedAccessException(Model model) {
+        model.addAttribute("errorMessage", "unauthorized access");
+        return "error/errorTemplate";
+    }
+
     @ExceptionHandler({RoomController.VisitorNotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
 //    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "visitor not found")
