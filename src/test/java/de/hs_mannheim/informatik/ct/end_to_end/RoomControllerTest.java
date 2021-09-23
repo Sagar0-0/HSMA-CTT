@@ -19,25 +19,9 @@ package de.hs_mannheim.informatik.ct.end_to_end;
  */
 
 import de.hs_mannheim.informatik.ct.model.Room;
-import de.hs_mannheim.informatik.ct.persistence.InvalidEmailException;
-import de.hs_mannheim.informatik.ct.persistence.InvalidExternalUserdataException;
-import de.hs_mannheim.informatik.ct.persistence.services.RoomService;
-import de.hs_mannheim.informatik.ct.persistence.services.RoomVisitService;
-import de.hs_mannheim.informatik.ct.persistence.services.VisitorService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -48,42 +32,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
-@AutoConfigureTestDatabase(replace = Replace.ANY)
-public class RoomControllerTest {
-    @TestConfiguration
-    static class RoomControllerTestConfig {
-        @Bean
-        public RoomService service() {
-            return new RoomService();
-        }
-    }
-
-    @Autowired
-    private RoomService roomService;
-
-    @Autowired
-    private RoomVisitService roomVisitService;
-
-    @Autowired
-    private VisitorService visitorService;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    private final String TEST_ROOM_NAME = "123";
-    private String TEST_ROOM_PIN;
-    private final String TEST_ROOM_PIN_INVALID = "";
-    private final String TEST_USER_EMAIL = "1233920@stud.hs-mannheim.de";
-
-    @BeforeEach
-    public void setUp() {
-        Room room = new Room(TEST_ROOM_NAME, "A", 10);
-        TEST_ROOM_PIN = room.getRoomPin();
-        roomService.saveRoom(room);
-    }
+@SpringBootTest(properties = {
+        "allow_full_room_checkIn=true",
+        "warning_for_full_room=false"
+})
+public class RoomControllerTest extends BasicRoomControllerTest{
 
     @Test
     public void areStaticPagesCallable() throws Exception {
@@ -176,19 +129,6 @@ public class RoomControllerTest {
                         .param("roomPin", TEST_ROOM_PIN)
                         .with(csrf()))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    public void checkInFullRoom() throws Exception {
-        // find and fill testroom
-        Room testRoom = roomService.findByName(TEST_ROOM_NAME).get();
-        fillRoom(testRoom, 10);
-
-        // request form to check into full room should redirect to roomFull/{roomId}
-        this.mockMvc.perform(
-                get("/r/" + TEST_ROOM_NAME).with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("roomFull/" + TEST_ROOM_NAME));
     }
 
     @Test
@@ -312,27 +252,5 @@ public class RoomControllerTest {
                 get("/r/" + "thisRoomShouldNotExsits").with(csrf()))
                 .andExpect(status().is(404))  // checking for response status code 404
                 .andExpect(content().string(containsString("Room not found")));// checking if error message is displayed for user
-    }
-
-
-    /**
-     * Helper method that creates users to fill room.
-     * An address is created by combining iterator value with '@stud.hs-mannheim.de'.
-     * To prevent the Test-User getting checked in, 0@stud.hs-mannheim.de is prevented as a fallback Address.
-     *
-     * @param room   the room that should get filled.
-     * @param amount the amount the room will be filled.
-     */
-    public void fillRoom(Room room, int amount) throws InvalidEmailException, InvalidExternalUserdataException {
-
-        for (int i = 0; i < amount; i++) {
-            String randomUserEmail = String.format("%d@stud.hs-mannheim.de", i);
-
-            if (randomUserEmail != TEST_USER_EMAIL) {
-                roomVisitService.visitRoom(visitorService.findOrCreateVisitor("" + i + "@stud.hs-mannheim.de", null, null, null), room);
-            } else {
-                roomVisitService.visitRoom(visitorService.findOrCreateVisitor("0@stud.hs-mannheim.de", null, null, null), room);
-            }
-        }
     }
 }
